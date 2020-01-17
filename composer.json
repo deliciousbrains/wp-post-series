@@ -1,0 +1,17 @@
+{
+  "name": "deliciousbrains/wp-post-series",
+  "description": "WordPress library for adding a series support to posts.",
+  "license": "GPL-2.0+",
+  "authors": [
+    {
+      "name": "Delicious Brains",
+      "email": "nom@deliciousbrains.com",
+      "homepage": "https://deliciousbrains.com/"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "DeliciousBrains\\WPPostSeries\\": "src/"
+    }
+  }
+}
