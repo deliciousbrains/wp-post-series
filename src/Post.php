@@ -74,13 +74,15 @@ class Post {
 
 		$info_box = ob_get_clean();
 
-		// Append or prepend
-		$append = apply_filters( 'wp_post_series_append_info', false );
+		$prepend = apply_filters( 'wp_post_series_prepend_info', true );
+		$append  = apply_filters( 'wp_post_series_append_info', true );
+
+		if ( $prepend ) {
+			$content = $info_box . $content;
+		}
 
 		if ( $append ) {
 			$content = $content . $info_box;
-		} else {
-			$content = $info_box . $content;
 		}
 
 		return $content;
