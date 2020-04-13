@@ -68,4 +68,31 @@ class PostSeries {
 
 		return $clauses;
 	}
+
+	/**
+	 * Get all posts from a post series.
+	 *
+	 * @param int   $term_id Term ID.
+	 * @param array $args Query arguments.
+	 * @return int[]|WP_Post[]
+	 */
+	public static function get_all_by_term( $term_id, $args = array() ) {
+		$defaults = array(
+			'post_type'      => 'post',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+			'orderby'        => 'date',
+			'order'          => 'asc',
+			'tax_query'      => array(
+				array(
+					'taxonomy' => 'post_series',
+					'field'    => 'id',
+					'terms'    => $term_id,
+				),
+			),
+		);
+
+		return get_posts( wp_parse_args( $args, $defaults ) );
+	}
 }
