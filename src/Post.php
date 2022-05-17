@@ -99,7 +99,7 @@ class Post {
 				} else {
 					$series_name = esc_html( $series->name );
 				}
-				printf( __( 'This is article %d of %d in the series <em>&ldquo;%s&rdquo;</em>', 'delicious_brains' ), $post_in_series, sizeof( $posts_in_series ), $series_name );
+				printf( __( 'This is article %d of %d in the series <em>&ldquo;%s&rdquo;</em>', PostSeries::TEXT_DOMAIN ), $post_in_series, sizeof( $posts_in_series ), $series_name );
 				?>
 			</p>
 

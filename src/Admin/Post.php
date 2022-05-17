@@ -3,6 +3,7 @@
 namespace DeliciousBrains\WPPostSeries\Admin;
 
 use DeliciousBrains\WPPostSeries\Post as FrontPost;
+use DeliciousBrains\WPPostSeries\PostSeries;
 
 class Post {
 
@@ -61,7 +62,7 @@ class Post {
 			if ( $current_series ) {
 				echo '<a href="' . esc_url( admin_url( 'edit.php?post_series=' . $current_series->slug ) ) . '">' . esc_html( $current_series->name ) . '</a>';
 			} else {
-				_e( 'N/A', 'delicious_brains' );
+				_e( 'N/A', PostSeries::TEXT_DOMAIN );
 			}
 		}
 	}
@@ -84,7 +85,7 @@ class Post {
 		}
 		?>
 		<select name="post_series">
-			<option value=""><?php _e( 'Show all series', 'delicious_brains' ) ?></option>
+			<option value=""><?php _e( 'Show all series', PostSeries::TEXT_DOMAIN ) ?></option>
 			<?php foreach ( $all_series as $series ) : ?>
 				<option value="<?php echo esc_attr( $series->slug ); ?>" <?php selected( $current_series, $series->slug ); ?>><?php echo esc_html( $series->name ); ?></option>
 			<?php endforeach; ?>
