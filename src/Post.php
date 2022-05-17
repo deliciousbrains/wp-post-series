@@ -29,7 +29,7 @@ class Post {
 		}
 
 		// Create series info box
-		$term_description = term_description( $series->term_id, 'post_series' );
+		$term_description = term_description( $series->term_id, PostSeries::TAXONOMY_NAME );
 		$posts_in_series  = get_posts( array(
 			'post_type'      => 'post',
 			'posts_per_page' => - 1,
@@ -39,9 +39,9 @@ class Post {
 			'order'          => 'asc',
 			'tax_query'      => array(
 				array(
-					'taxonomy' => 'post_series',
-					'field'    => 'slug',
-					'terms'    => $series->slug,
+                    'taxonomy' => PostSeries::TAXONOMY_NAME,
+                    'field'    => 'slug',
+                    'terms'    => $series->slug,
 				),
 			),
 		) );
@@ -95,7 +95,7 @@ class Post {
 			<p class="post-series-name">
 				<?php
 				if ( apply_filters( 'wp_post_series_enable_archive', false ) ) {
-					$series_name = '<a href="' . get_term_link( $series->term_id, 'post_series' ) . '">' . esc_html( $series->name ) . '</a>';
+					$series_name = '<a href="' . get_term_link( $series->term_id, PostSeries::TAXONOMY_NAME ) . '">' . esc_html( $series->name ) . '</a>';
 				} else {
 					$series_name = esc_html( $series->name );
 				}
@@ -140,7 +140,7 @@ class Post {
 	 * @return object the term object
 	 */
 	public function get_post_series( $post_id ) {
-		$series = wp_get_post_terms( $post_id, 'post_series' );
+		$series = wp_get_post_terms( $post_id, PostSeries::TAXONOMY_NAME );
 
 		if ( ! is_wp_error( $series ) && ! empty( $series ) && is_array( $series ) ) {
 			$series = current( $series );

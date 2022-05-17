@@ -41,7 +41,7 @@ class Post {
 			$new_columns[ $key ] = $column;
 
 			if ( 'categories' == $key ) {
-				$new_columns["post_series"] = __( "Series", "wp_post_series" );
+				$new_columns["post_series"] = __( "Series", PostSeries::TEXT_DOMAIN );
 			}
 		}
 
@@ -78,7 +78,7 @@ class Post {
 		}
 
 		$current_series = isset( $_REQUEST['post_series'] ) ? sanitize_text_field( $_REQUEST['post_series'] ) : '';
-		$all_series     = get_terms( 'post_series', array( 'hide_empty' => true, 'orderby' => 'name' ) );
+		$all_series     = get_terms( PostSeries::TAXONOMY_NAME, array( 'hide_empty' => true, 'orderby' => 'name' ) );
 
 		if ( empty( $all_series ) ) {
 			return;
@@ -103,8 +103,8 @@ class Post {
 		$current_series = $this->post->get_post_series_id( $post->ID );
 
 		// Get list of all series and the taxonomy
-		$tax        = get_taxonomy( 'post_series' );
-		$all_series = get_terms( 'post_series', array( 'hide_empty' => false, 'orderby' => 'name' ) );
+		$tax        = get_taxonomy( PostSeries::TAXONOMY_NAME );
+		$all_series = get_terms( PostSeries::TAXONOMY_NAME, array( 'hide_empty' => false, 'orderby' => 'name' ) );
 
 		?>
 		<div id="taxonomy-<?php echo $tax->name; ?>" class="categorydiv">

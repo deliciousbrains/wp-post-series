@@ -8,6 +8,8 @@ class PostSeries {
 
     const TEXT_DOMAIN = 'delicious_brains';
 
+    const TAXONOMY_NAME = 'post_series';
+
 	public function init() {
 		$post      = new Post();
 		$adminPost = new Admin\Post( $post );
@@ -24,8 +26,8 @@ class PostSeries {
 	 */
 	public static function get_all() {
 		$terms = get_terms( array(
-			'taxonomy' => 'post_series',
-			'fields'   => 'ids',
+                                'taxonomy' => PostSeries::TAXONOMY_NAME,
+                                'fields'   => 'ids',
 		) );
 
 		$args = array(
@@ -34,8 +36,8 @@ class PostSeries {
 			'post_status'   => 'publish',
 			'tax_query'     => array(
 				array(
-					'taxonomy' => 'post_series',
-					'terms'    => $terms,
+                    'taxonomy' => PostSeries::TAXONOMY_NAME,
+                    'terms'    => $terms,
 				),
 			),
 		);
@@ -91,9 +93,9 @@ class PostSeries {
 			'order'          => 'asc',
 			'tax_query'      => array(
 				array(
-					'taxonomy' => 'post_series',
-					'field'    => 'id',
-					'terms'    => $term_id,
+                    'taxonomy' => PostSeries::TAXONOMY_NAME,
+                    'field'    => 'id',
+                    'terms'    => $term_id,
 				),
 			),
 		);

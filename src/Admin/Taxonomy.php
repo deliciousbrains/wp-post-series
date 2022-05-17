@@ -29,7 +29,7 @@ class Taxonomy {
 		$plural   = __( 'Post series', PostSeries::TEXT_DOMAIN );
 		$singular = __( 'Post series', PostSeries::TEXT_DOMAIN );
 
-		register_taxonomy( 'post_series', array( 'post' ), array(
+		register_taxonomy( PostSeries::TAXONOMY_NAME, array( 'post' ), array(
 			'hierarchical' => false,
 			'label'        => $plural,
 			'labels'       => array(
@@ -53,7 +53,7 @@ class Taxonomy {
 	}
 
     public function register_term_meta() {
-        register_term_meta( 'post_series', PostSeriesMeta::INTRO_PAGE_ID_META_KEY, [
+        register_term_meta( PostSeries::TAXONOMY_NAME, PostSeriesMeta::INTRO_PAGE_ID_META_KEY, [
             'type' => 'integer',
             'description' => __( 'The ID of the post series introduction page', PostSeries::TEXT_DOMAIN),
             'single' => true,
