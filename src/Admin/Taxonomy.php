@@ -2,6 +2,8 @@
 
 namespace DeliciousBrains\WPPostSeries\Admin;
 
+use DeliciousBrains\WPPostSeries\PostSeries;
+
 class Taxonomy {
 
 	/**
@@ -20,6 +22,7 @@ class Taxonomy {
 
 	public function init() {
 		add_action( 'init', array( $this, 'register_taxonomies' ) );
+		add_action( 'init', array( $this, 'register_term_meta' ) );
 	}
 
 	public function register_taxonomies() {
@@ -48,4 +51,12 @@ class Taxonomy {
 			'meta_box_cb'  => array( $this->post, 'post_series_meta_box' ),
 		) );
 	}
+
+    public function register_term_meta() {
+        register_term_meta( 'post_series', PostSeriesMeta::INTRO_PAGE_ID_META_KEY, [
+            'type' => 'integer',
+            'description' => __( 'The ID of the post series introduction page', PostSeries::TEXT_DOMAIN),
+            'single' => true,
+        ] );
+    }
 }
