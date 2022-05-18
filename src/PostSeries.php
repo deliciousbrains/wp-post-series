@@ -126,9 +126,9 @@ class PostSeries {
 	 * @return \WP_Post|null
 	 */
 	public static function get_intro_page( $post_series ) {
-		$term_id = is_a( $post_series, \WP_Term::class ) ? $post_series->term_id : $post_series;
+		$post_series_id = is_a( $post_series, \WP_Term::class ) ? $post_series->term_id : $post_series;
 
-		$intro_page_id = self::get_intro_page_id();
+		$intro_page_id = self::get_intro_page_id( $post_series_id );
 
 		if ( empty( $intro_page_id ) ) {
 			return null;
