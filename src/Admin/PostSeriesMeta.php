@@ -28,7 +28,7 @@ class PostSeriesMeta {
 	 * @return void
 	 */
 	public function output_create_fields( $taxonomy ) {
-		$this->edit_fields( null, $taxonomy );
+		$this->output_edit_fields( null, $taxonomy );
 	}
 
 	/**
