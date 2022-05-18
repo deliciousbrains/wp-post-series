@@ -57,6 +57,10 @@ class PostSeriesMeta {
 						name="<?php echo self::INTRO_PAGE_ID_FIELD_NAME ?>"
 						id="<?php echo self::INTRO_PAGE_ID_FIELD_NAME ?>">
 
+						<option value="">
+							No introduction page
+						</option>
+
 						<?php foreach ( get_pages() as $page ) : ?>
 							<option
 								value="<?php echo esc_attr( $page->ID ) ?>" <?php selected( $page->ID, $intro_page_id ) ?>>
