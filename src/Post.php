@@ -5,13 +5,13 @@ namespace DeliciousBrains\WPPostSeries;
 class Post {
 
 	public function init() {
-		add_filter( 'the_content', array( $this, 'add_series_to_content' ) );
+		add_filter( 'the_content', [ $this, 'add_series_to_content' ] );
 	}
 
 	/**
 	 * Append/Prepend the series info box to the post content
 	 *
-	 * @param  string $content Post content
+	 * @param string $content Post content
 	 *
 	 * @return string Ammended post content
 	 */
@@ -29,22 +29,22 @@ class Post {
 		}
 
 		// Create series info box
-		$term_description = term_description( $series->term_id, 'post_series' );
-		$posts_in_series  = get_posts( array(
-			'post_type'      => 'post',
-			'posts_per_page' => - 1,
-			'fields'         => 'ids',
-			'no_found_rows'  => true,
-			'orderby'        => 'date',
-			'order'          => 'asc',
-			'tax_query'      => array(
-				array(
-					'taxonomy' => 'post_series',
-					'field'    => 'slug',
-					'terms'    => $series->slug,
-				),
-			),
-		) );
+		$term_description = term_description( $series->term_id, PostSeries::TAXONOMY_NAME );
+		$posts_in_series = get_posts( [
+										  'post_type'      => 'post',
+										  'posts_per_page' => -1,
+										  'fields'         => 'ids',
+										  'no_found_rows'  => true,
+										  'orderby'        => 'date',
+										  'order'          => 'asc',
+										  'tax_query'      => [
+											  [
+												  'taxonomy' => PostSeries::TAXONOMY_NAME,
+												  'field'    => 'slug',
+												  'terms'    => $series->slug,
+											  ],
+										  ],
+									  ] );
 
 		$post_in_series = 1;
 
@@ -52,7 +52,7 @@ class Post {
 			if ( $post_id == $post->ID ) {
 				break;
 			}
-			$post_in_series ++;
+			$post_in_series++;
 		}
 
 		// add the series slug to the post series box class
@@ -64,18 +64,18 @@ class Post {
 
 		ob_start();
 
-		$this->series_box_html( array(
-			'series'                => $series,
-			'description'           => $term_description,
-			'posts_in_series'       => $posts_in_series,
-			'post_in_series'        => $post_in_series,
-			'post_series_box_class' => $post_series_box_class,
-		) );
+		$this->series_box_html( [
+									'series'                => $series,
+									'description'           => $term_description,
+									'posts_in_series'       => $posts_in_series,
+									'post_in_series'        => $post_in_series,
+									'post_series_box_class' => $post_series_box_class,
+								] );
 
 		$info_box = ob_get_clean();
 
 		$prepend = apply_filters( 'wp_post_series_prepend_info', true );
-		$append  = apply_filters( 'wp_post_series_append_info', true );
+		$append = apply_filters( 'wp_post_series_append_info', true );
 
 		if ( $prepend ) {
 			$content = $info_box . $content;
@@ -91,21 +91,23 @@ class Post {
 	function series_box_html( $args ) {
 		extract( $args );
 		?>
-		<aside class="<?php echo $post_series_box_class; ?>">
+		<aside
+			class="<?php echo $post_series_box_class; ?>">
 			<p class="post-series-name">
 				<?php
 				if ( apply_filters( 'wp_post_series_enable_archive', false ) ) {
-					$series_name = '<a href="' . get_term_link( $series->term_id, 'post_series' ) . '">' . esc_html( $series->name ) . '</a>';
+					$series_name = '<a href="' . get_term_link( $series->term_id, PostSeries::TAXONOMY_NAME ) . '">' . esc_html( $series->name ) . '</a>';
 				} else {
 					$series_name = esc_html( $series->name );
 				}
-				printf( __( 'This is article %d of %d in the series <em>&ldquo;%s&rdquo;</em>', 'delicious_brains' ), $post_in_series, sizeof( $posts_in_series ), $series_name );
+				printf( __( 'This is article %d of %d in the series <em>&ldquo;%s&rdquo;</em>', PostSeries::TEXT_DOMAIN ), $post_in_series, sizeof( $posts_in_series ), $series_name );
 				?>
 			</p>
 
 			<?php if ( is_single() && sizeof( $posts_in_series ) > 1 ) : ?>
 
-				<nav class="post-series-nav">
+				<nav
+					class="post-series-nav">
 					<ol>
 						<?php foreach ( $posts_in_series as $key => $post_id ) : ?>
 							<li>
@@ -124,7 +126,8 @@ class Post {
 
 			<?php if ( is_single() ) : ?>
 				<?php if ( $description ) : ?>
-					<div class="post-series-description"><?php echo wpautop( wptexturize( $description ) ); ?></div>
+					<div
+						class="post-series-description"><?php echo wpautop( wptexturize( $description ) ); ?></div>
 				<?php endif; ?>
 
 			<?php endif; ?>
@@ -135,12 +138,12 @@ class Post {
 	/**
 	 * Get a post's series
 	 *
-	 * @param  int $post_id post ID
+	 * @param int $post_id post ID
 	 *
 	 * @return object the term object
 	 */
 	public function get_post_series( $post_id ) {
-		$series = wp_get_post_terms( $post_id, 'post_series' );
+		$series = wp_get_post_terms( $post_id, PostSeries::TAXONOMY_NAME );
 
 		if ( ! is_wp_error( $series ) && ! empty( $series ) && is_array( $series ) ) {
 			$series = current( $series );
@@ -154,7 +157,7 @@ class Post {
 	/**
 	 * Get the ID of a post's series
 	 *
-	 * @param  int $post_id post ID
+	 * @param int $post_id post ID
 	 *
 	 * @return int series ID
 	 */

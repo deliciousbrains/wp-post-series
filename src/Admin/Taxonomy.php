@@ -2,6 +2,8 @@
 
 namespace DeliciousBrains\WPPostSeries\Admin;
 
+use DeliciousBrains\WPPostSeries\PostSeries;
+
 class Taxonomy {
 
 	/**
@@ -19,33 +21,42 @@ class Taxonomy {
 	}
 
 	public function init() {
-		add_action( 'init', array( $this, 'register_taxonomies' ) );
+		add_action( 'init', [ $this, 'register_taxonomies' ] );
+		add_action( 'init', [ $this, 'register_term_meta' ] );
 	}
 
 	public function register_taxonomies() {
-		$plural   = __( 'Post series', 'delicious_brains' );
-		$singular = __( 'Post series', 'delicious_brains' );
+		$plural = __( 'Post series', PostSeries::TEXT_DOMAIN );
+		$singular = __( 'Post series', PostSeries::TEXT_DOMAIN );
 
-		register_taxonomy( 'post_series', array( 'post' ), array(
+		register_taxonomy( PostSeries::TAXONOMY_NAME, [ 'post' ], [
 			'hierarchical' => false,
 			'label'        => $plural,
-			'labels'       => array(
-				'menu_name'         => __( 'Series', 'delicious_brains' ),
+			'labels'       => [
+				'menu_name'         => __( 'Series', PostSeries::TEXT_DOMAIN ),
 				'name'              => $plural,
 				'singular_name'     => $singular,
-				'search_items'      => sprintf( __( 'Search %s', 'delicious_brains' ), $plural ),
-				'all_items'         => sprintf( __( 'All %s', 'delicious_brains' ), $plural ),
-				'parent_item'       => sprintf( __( '%s', 'delicious_brains' ), $singular ),
-				'parent_item_colon' => sprintf( __( '%s:', 'delicious_brains' ), $singular ),
-				'edit_item'         => sprintf( __( 'Edit %s', 'delicious_brains' ), $singular ),
-				'update_item'       => sprintf( __( 'Update %s', 'delicious_brains' ), $singular ),
-				'add_new_item'      => sprintf( __( 'Add New %s', 'delicious_brains' ), $singular ),
-				'new_item_name'     => sprintf( __( 'New %s Name', 'delicious_brains' ), $singular ),
-			),
+				'search_items'      => sprintf( __( 'Search %s', PostSeries::TEXT_DOMAIN ), $plural ),
+				'all_items'         => sprintf( __( 'All %s', PostSeries::TEXT_DOMAIN ), $plural ),
+				'parent_item'       => sprintf( __( '%s', PostSeries::TEXT_DOMAIN ), $singular ),
+				'parent_item_colon' => sprintf( __( '%s:', PostSeries::TEXT_DOMAIN ), $singular ),
+				'edit_item'         => sprintf( __( 'Edit %s', PostSeries::TEXT_DOMAIN ), $singular ),
+				'update_item'       => sprintf( __( 'Update %s', PostSeries::TEXT_DOMAIN ), $singular ),
+				'add_new_item'      => sprintf( __( 'Add New %s', PostSeries::TEXT_DOMAIN ), $singular ),
+				'new_item_name'     => sprintf( __( 'New %s Name', PostSeries::TEXT_DOMAIN ), $singular ),
+			],
 			'show_ui'      => true,
 			'query_var'    => true,
 			'rewrite'      => apply_filters( 'wp_post_series_enable_archive', false ),
-			'meta_box_cb'  => array( $this->post, 'post_series_meta_box' ),
-		) );
+			'meta_box_cb'  => [ $this->post, 'post_series_meta_box' ],
+		] );
+	}
+
+	public function register_term_meta() {
+		register_term_meta( PostSeries::TAXONOMY_NAME, PostSeriesMeta::INTRO_PAGE_ID_META_KEY, [
+			'type'        => 'integer',
+			'description' => __( 'The ID of the post series introduction page', PostSeries::TEXT_DOMAIN ),
+			'single'      => true,
+		] );
 	}
 }
